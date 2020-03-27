@@ -1,1 +1,442 @@
-"use strict";function _toConsumableArray(a){return _arrayWithoutHoles(a)||_iterableToArray(a)||_unsupportedIterableToArray(a)||_nonIterableSpread()}function _nonIterableSpread(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}function _unsupportedIterableToArray(a,b){if(a){if("string"==typeof a)return _arrayLikeToArray(a,b);var c=Object.prototype.toString.call(a).slice(8,-1);return"Object"===c&&a.constructor&&(c=a.constructor.name),"Map"===c||"Set"===c?Array.from(c):"Arguments"===c||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(c)?_arrayLikeToArray(a,b):void 0}}function _iterableToArray(a){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(a))return Array.from(a)}function _arrayWithoutHoles(a){if(Array.isArray(a))return _arrayLikeToArray(a)}function _arrayLikeToArray(a,b){(null==b||b>a.length)&&(b=a.length);for(var c=0,d=Array(b);c<b;c++)d[c]=a[c];return d}var checker={Android:function Android(){return navigator.userAgent.match(/Android/i)},BlackBerry:function BlackBerry(){return navigator.userAgent.match(/BlackBerry/i)},iOS:function iOS(){return navigator.userAgent.match(/iPhone|iPad|iPod/i)},Opera:function Opera(){return navigator.userAgent.match(/Opera Mini/i)},Windows:function Windows(){return navigator.userAgent.match(/IEMobile/i)||navigator.userAgent.match(/WPDesktop/i)},any:function any(){return checker.Android()||checker.BlackBerry()||checker.iOS()||checker.Opera()||checker.Windows()}},isMobile=checker.any();document.addEventListener("DOMContentLoaded",function(){if(isMobile){var a=[document.getElementById("btn-shuffle"),document.getElementById("btn-reset"),document.getElementById("btn-undo")];a.forEach(function(a,b){a.style.margin="10px 3%",a.style.width="30%",a.style.left=31*b+"%",a.style.height="9vh",a.style.opacity="0.4",a.style.fontSize="25px"}),camera.position.z=200}},!1);function onResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}window.addEventListener("resize",onResize,!1),isMobile?(window.addEventListener("touchstart",touchStart),document.addEventListener("touchstart",function(a){"submit"!==a.target.type&&a.preventDefault()},{passive:!1}),window.addEventListener("touchmove",touchMove),window.addEventListener("touchend",touchEnd)):(window.addEventListener("mousedown",onMouseDown),window.addEventListener("mouseup",onMouseUp,!1),window.addEventListener("mousemove",mouseMove,!1));var scene=new THREE.Scene;scene.background=new THREE.Color(5592456);var camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,.1,400);camera.position.z=80;var renderer=new THREE.WebGLRenderer({antialias:!0});renderer.setSize(window.innerWidth,window.innerHeight);var raycaster=new THREE.Raycaster,mouse=new THREE.Vector2;document.body.appendChild(renderer.domElement);var controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=isMobile?1:4,controls.zoomSpeed=.7,controls.minDistance=120,controls.maxDistance=350,controls.noZoom=!1,controls.keys=[65,83,68],controls.mouseButtons={LEFT:0,RIGHT:2},controls.noPan=!0,renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFSoftShadowMap;var lightDimension=500,light=new THREE.AmbientLight(14540253,.5);scene.add(light);var light1=new THREE.SpotLight(16777215,.5);light1.castShadow=!0,scene.add(light1),light1.shadow.mapSize.width=512,light1.shadow.mapSize.height=512,light1.shadow.camera.near=.5,light1.shadow.camera.far=500,light1.position.set(500,500,500);var light2=new THREE.SpotLight(16777215,.5);light2.castShadow=!0,scene.add(light2),light2.shadow.mapSize.width=512,light2.shadow.mapSize.height=512,light2.shadow.camera.near=.5,light2.shadow.camera.far=500,light2.position.set(500,500,-500);var light3=new THREE.SpotLight(16777215,.5);light3.castShadow=!0,scene.add(light3),light3.shadow.mapSize.width=512,light3.shadow.mapSize.height=512,light3.shadow.camera.near=.5,light3.shadow.camera.far=500,light3.position.set(500,-500,500);var light4=new THREE.SpotLight(16777215,.5);light4.castShadow=!0,scene.add(light4),light4.shadow.mapSize.width=512,light4.shadow.mapSize.height=512,light4.shadow.camera.near=.5,light4.shadow.camera.far=500,light4.position.set(500,-500,-500);var light5=new THREE.SpotLight(16777215,.5);light5.castShadow=!0,scene.add(light5),light5.shadow.mapSize.width=512,light5.shadow.mapSize.height=512,light5.shadow.camera.near=.5,light5.shadow.camera.far=500,light5.position.set(-500,-500,500);var light6=new THREE.SpotLight(16777215,.5);light6.castShadow=!0,scene.add(light6),light6.shadow.mapSize.width=512,light6.shadow.mapSize.height=512,light6.shadow.camera.near=.5,light6.shadow.camera.far=500,light6.position.set(-500,500,-500);var light7=new THREE.SpotLight(16777215,.5);light7.castShadow=!0,scene.add(light7),light7.shadow.mapSize.width=512,light7.shadow.mapSize.height=512,light7.shadow.camera.near=.5,light7.shadow.camera.far=500,light7.position.set(-500,-500,-500);var light8=new THREE.SpotLight(16777215,.5);light8.castShadow=!0,scene.add(light8),light8.shadow.mapSize.width=512,light8.shadow.mapSize.height=512,light8.shadow.camera.near=.5,light8.shadow.camera.far=500,light8.position.set(-500,500,500);var dragStart,dragEnd,dragStartPiece,dragStartSide,dragStartObject,currentDragSide,extractSide=function(a){var b=[a.x,a.y,a.z],c=[a.x,a.y,a.z].map(function(a){return Math.abs(Math.round(a))}),d=Math.max.apply(Math,_toConsumableArray(c.map(function(a){return Math.abs(a)}))),e=c.indexOf(d);return{axis:e,direction:0>b[e]?-1:1}},rotateHorizontal=function(a,b){var c=cube.getCenterPointOfPlane(cube.planeH1),d=c.z,e=cube.getCenterPointOfPlane(cube.planeH2),f=e.z,g=cube.getCenterPointOfPiece(a),h=g.z,i=d-h,j=f-h;0<i&&0<j?(void 0,cube.rotateBottom(b)):0>i&&0>j?(void 0,cube.rotateTop(b)):(void 0,cube.rotateMiddle(b))},rotationHandler=function(){var a=dragEnd.x-dragStart.x,b=dragEnd.y-dragStart.y,c=dragEnd.z-dragStart.z,d=[a,b,c].map(function(a){return Math.abs(a)}),e=d.indexOf(Math.max.apply(Math,_toConsumableArray(d.map(function(a){return Math.abs(a)}))));if(2!==currentDragSide.axis&&2!==e){var f=dragEnd.cross(dragStart),g=new THREE.Vector3(0,0,1),h=!(0>f.dot(g));rotateHorizontal(dragStartPiece,h)}else{var i=dragEnd.cross(dragStart),j=cube.getNormalOfPlane(),k=!(0>i.dot(j)),l=cube.getAllPiecesBehindThePlane();cube.rotateVertical(k,!l.includes(dragStartPiece))}};function onMouseDown(a){mouse.x=2*(a.clientX/window.innerWidth)-1,mouse.y=2*-(a.clientY/window.innerHeight)+1,raycaster.setFromCamera(mouse,camera);var b=raycaster.intersectObjects(scene.children,!0);try{if(b.length?(controls.enabled=!1,dragStart=b.find(function(a){return-1==a.object.name.indexOf("plane")}).point,currentDragSide=extractSide(dragStart)):(dragStart=void 0,currentDragSide=void 0),b.length){var c=b.find(function(a){return-1==a.object.name.indexOf("plane")});c&&(dragStartPiece=c.object.parent,dragStartSide=c.face,dragStartObject=c.object)}}catch(a){}}function touchStart(a){mouse.x=2*((a.clientX||a.touches[0].clientX)/window.innerWidth)-1,mouse.y=2*-((a.clientY||a.touches[0].clientY)/window.innerHeight)+1,raycaster.setFromCamera(mouse,camera);var b=raycaster.intersectObjects(scene.children,!0);try{if(b.length?(controls.enabled=!1,dragStart=b.find(function(a){return-1==a.object.name.indexOf("plane")}).point,currentDragSide=extractSide(dragStart)):(dragStart=void 0,currentDragSide=void 0,controls.enabled=!0),b.length){var c=b.find(function(a){return-1==a.object.name.indexOf("plane")});c&&(dragStartPiece=c.object.parent,dragStartSide=c.face,dragStartObject=c.object)}}catch(a){}}function onMouseUp(){if(dragStart&&dragEnd){var o=[];cube.planes.forEach(function(a,b){var c=cube.getAllPiecesBehindThePlane({plane:cube.planes[b],inverse:!1});c.includes(dragStartPiece)&&o.push(cube.planes[b])});var q=cube.getNormalOfFace(dragStartSide);o.forEach(function(a){var b=cube.getNormalOfPlane(a,!0),c=q.dot(b);.9<c&&o.splice(o.indexOf(a),1)});var a=new THREE.Vector3,b=a.subVectors(dragStart,dragEnd).normalize(),c=dragStart.clone(),d=dragEnd.clone(),e=new THREE.Vector3;e.subVectors(d,c).multiplyScalar(1+5/e.length()).add(c);var f=new THREE.Raycaster(e,b),g=f.intersectObjects(scene.children,!0);debugger;var p=g.filter(function(a){return-1!==a.object.name.indexOf("plane")&&o.includes(a.object)});if(p&&p.length&&p.forEach(function(a){var b=o.indexOf(a.object);-1!==b&&1<o.length&&o.splice(b,1)}),o.length){var h=dragEnd.cross(dragStart),i=cube.getNormalOfPlane(o[0],!0),j=0>h.dot(i)?1:-1,k=cube.planes.indexOf(o[0]),l=cube.getAllPiecesBehindThePlane({plane:cube.planes[k],inverse:!1}),m=cube.getCenterPointOfPlane(o[0]),n=0;cube.undoState.push({plane:cube.planes[k],direction:j});var r=setInterval(function(){l.forEach(function(a){cube.rotateAboutPoint(a,new THREE.Vector3(0,0,0),i,degree(12*j),!0)}),n++,6==n&&clearInterval(r)},50)}}dragStart=void 0,dragEnd=void 0,dragStartPiece=void 0,currentDragSide=void 0}function touchEnd(){if(dragStart&&dragEnd){var o=[];cube.planes.forEach(function(a,b){var c=cube.getAllPiecesBehindThePlane({plane:cube.planes[b],inverse:!1});c.includes(dragStartPiece)&&o.push(cube.planes[b])});var q=cube.getNormalOfFace(dragStartSide);o.forEach(function(a){var b=cube.getNormalOfPlane(a,!0),c=q.dot(b);.9<c&&o.splice(o.indexOf(a),1)});var a=new THREE.Vector3,b=a.subVectors(dragStart,dragEnd).normalize(),c=dragStart.clone(),d=dragEnd.clone(),e=new THREE.Vector3;e.subVectors(d,c).multiplyScalar(1+10/e.length()).add(c);var f=new THREE.Raycaster(e,b),g=f.intersectObjects(scene.children,!0);if(g.forEach(function(a){if(-1!==a.object.name.indexOf("plane")){var b=o.indexOf(a.object);-1!==b&&o.splice(b,1)}}),o.length){var h=dragEnd.cross(dragStart),i=cube.getNormalOfPlane(o[0],!0),j=0>h.dot(i)?1:-1,k=cube.planes.indexOf(o[0]),l=cube.getAllPiecesBehindThePlane({plane:cube.planes[k],inverse:!1}),m=cube.getCenterPointOfPlane(o[0]),n=0;cube.undoState.push({plane:cube.planes[k],direction:j});var p=setInterval(function(){l.forEach(function(a){cube.rotateAboutPoint(a,new THREE.Vector3(0,0,0),i,degree(12*j),!0)}),n++,6==n&&clearInterval(p)},50)}}dragStart=void 0,dragEnd=void 0,dragStartPiece=void 0,currentDragSide=void 0}var mouseEventQuata=0,mouseEventLimit=0;function mouseMove(a){if(0>mouseEventLimit||dragStart){mouse.x=2*(a.clientX/window.innerWidth)-1,mouse.y=2*-(a.clientY/window.innerHeight)+1,raycaster.setFromCamera(mouse,camera);var o=raycaster.intersectObjects(scene.children,!0);if(dragStartObject){var c=dragStartObject.material.color,d=c.r,e=c.g,f=c.b;if(.09>d&&.09>e&&.09>f){var b=o.find(function(a){return-1==a.object.name.indexOf("plane")}),g=b?b.object.material.color:{},h=g.r,i=g.g,j=g.b;b&&!(.09>h&&.09>i&&.09>j)&&(dragStartPiece=b.object.parent,dragStartSide=b.face,dragStartObject=b.object)}}if(0==o.length)isMobile||(controls.enabled=!0);else{var p=o.find(function(a){return-1==a.object.name.indexOf("plane")});if(p&&dragStartPiece&&dragStartObject.name===p.object.name)dragEnd=p?p.point:null;else if(dragStartObject){var k=dragStartObject.material.color,l=k.r,m=k.g,n=k.b;.09>l&&.09>m&&.09>n||onMouseUp()}controls.enabled=!1}mouseEventLimit=mouseEventQuata}mouseEventLimit--}function touchMove(a){if(0>mouseEventLimit||dragStart){mouse.x=2*(a.changedTouches[0].clientX/window.innerWidth)-1,mouse.y=2*-(a.changedTouches[0].clientY/window.innerHeight)+1,raycaster.setFromCamera(mouse,camera);var o=raycaster.intersectObjects(scene.children,!0);if(dragStartObject){var c=dragStartObject.material.color,d=c.r,e=c.g,f=c.b;if(.09>d&&.09>e&&.09>f){var b=o.find(function(a){return-1==a.object.name.indexOf("plane")}),g=b?b.object.material.color:{},h=g.r,i=g.g,j=g.b;b&&!(.09>h&&.09>i&&.09>j)&&(dragStartPiece=b.object.parent,dragStartSide=b.face,dragStartObject=b.object)}}if(o.length){var p=o.find(function(a){return-1==a.object.name.indexOf("plane")});debugger;if(p&&dragStartPiece&&dragStartObject.name===p.object.name)dragEnd=p?p.point:null;else if(dragStartObject){var k=dragStartObject.material.color,l=k.r,m=k.g,n=k.b;.09>l&&.09>m&&.09>n||onMouseUp()}controls.enabled=!1}mouseEventLimit=mouseEventQuata}mouseEventLimit--}var animate=function(){requestAnimationFrame(animate),controls.update(),renderer.render(scene,camera)},reset=function(){cube.destructCube(),cube.constructCube(),cube.undoState=[]},shuffle=function(){simulate()},undo=function(){cube.undo()};animate();
+"use strict";
+
+var checker = {
+  Android: function Android() {
+    return navigator.userAgent.match(/Android/i);
+  },
+  BlackBerry: function BlackBerry() {
+    return navigator.userAgent.match(/BlackBerry/i);
+  },
+  iOS: function iOS() {
+    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+  },
+  Opera: function Opera() {
+    return navigator.userAgent.match(/Opera Mini/i);
+  },
+  Windows: function Windows() {
+    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+  },
+  any: function any() {
+    return checker.Android() || checker.BlackBerry() || checker.iOS() || checker.Opera() || checker.Windows();
+  }
+};
+var isMobile = checker.any();
+document.addEventListener('DOMContentLoaded', function () {
+  if (isMobile) {
+    document.getElementById('btn').style.margin = '10px 3%';
+    document.getElementById('btn').style.width = '94%';
+    document.getElementById('btn').style.height = '10vh';
+    document.getElementById('btn').style.opacity = '0.4';
+    document.getElementById('btn').style.fontSize = '50px';
+  }
+}, false);
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+window.addEventListener('resize', onResize, false);
+
+if (!isMobile) {
+  window.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mouseup', onMouseUp, false);
+  window.addEventListener('mousemove', mouseMove, false);
+} else {
+  window.addEventListener('touchstart', touchStart);
+  window.addEventListener('touchmove', touchMove);
+  window.addEventListener('touchend', touchEnd);
+}
+
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x555588);
+var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 400);
+camera.position.z = 80;
+var renderer = new THREE.WebGLRenderer({
+  antialias: true
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+document.body.appendChild(renderer.domElement);
+var controls = new THREE.TrackballControls(camera, renderer.domElement);
+if (isMobile) controls.rotateSpeed = 1;else controls.rotateSpeed = 4.0;
+controls.zoomSpeed = 1.2;
+controls.minDistance = 100;
+controls.maxDistance = 400;
+controls.noZoom = false;
+controls.noPan = false;
+controls.keys = [65, 83, 68];
+controls.mouseButtons = {
+  LEFT: 0,
+  RIGHT: 2
+};
+controls.noPan = true;
+camera.position.set(50, 50, 50);
+if (isMobile) controls.enabled = false;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+var lightDimension = 500;
+var light = new THREE.AmbientLight(0xdddddd, 0.5);
+scene.add(light);
+var light1 = new THREE.SpotLight(0xffffff, 0.5);
+light1.castShadow = true;
+scene.add(light1);
+light1.shadow.mapSize.width = 512;
+light1.shadow.mapSize.height = 512;
+light1.shadow.camera.near = 0.5;
+light1.shadow.camera.far = 500;
+light1.position.set(lightDimension, lightDimension, lightDimension);
+var light2 = new THREE.SpotLight(0xffffff, 0.5);
+light2.castShadow = true;
+scene.add(light2);
+light2.shadow.mapSize.width = 512;
+light2.shadow.mapSize.height = 512;
+light2.shadow.camera.near = 0.5;
+light2.shadow.camera.far = 500;
+light2.position.set(lightDimension, lightDimension, -lightDimension);
+var light3 = new THREE.SpotLight(0xffffff, 0.5);
+light3.castShadow = true;
+scene.add(light3);
+light3.shadow.mapSize.width = 512;
+light3.shadow.mapSize.height = 512;
+light3.shadow.camera.near = 0.5;
+light3.shadow.camera.far = 500;
+light3.position.set(lightDimension, -lightDimension, lightDimension);
+var light4 = new THREE.SpotLight(0xffffff, 0.5);
+light4.castShadow = true;
+scene.add(light4);
+light4.shadow.mapSize.width = 512;
+light4.shadow.mapSize.height = 512;
+light4.shadow.camera.near = 0.5;
+light4.shadow.camera.far = 500;
+light4.position.set(lightDimension, -lightDimension, -lightDimension);
+var light5 = new THREE.SpotLight(0xffffff, 0.5);
+light5.castShadow = true;
+scene.add(light5);
+light5.shadow.mapSize.width = 512;
+light5.shadow.mapSize.height = 512;
+light5.shadow.camera.near = 0.5;
+light5.shadow.camera.far = 500;
+light5.position.set(-lightDimension, -lightDimension, lightDimension);
+var dragStart;
+var dragEnd;
+var currentPlane;
+var currentSign;
+var currentCoordinates;
+
+function onMouseDown(event) {
+  mouse.x = event.clientX / window.innerWidth * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (cube.editMode && intersects.length) {
+    var intersect = intersects[0];
+    var _intersect$object$mat = intersect.object.material.color,
+        r = _intersect$object$mat.r,
+        g = _intersect$object$mat.g,
+        b = _intersect$object$mat.b;
+
+    if (r < 0.1 && g < 0.1 && b < 0.1) {
+      return;
+    }
+
+    intersect.object.material.color = new THREE.Color(cube.activeEditColor);
+    return;
+  }
+
+  if (intersects.length) {
+    controls.enabled = false;
+    dragStart = intersects[0].point;
+  } else {
+    dragStart = undefined;
+  }
+
+  if (intersects.length) {
+    var block = intersects[0];
+    var _block$point = block.point,
+        x = _block$point.x,
+        y = _block$point.y,
+        z = _block$point.z;
+    var max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+    var plane = [Math.abs(x), Math.abs(y), Math.abs(z)].map(function (e) {
+      return e < max;
+    }).reduce(function (a, e, i) {
+      return e ? a + i : a;
+    }, '').split('').map(function (e) {
+      return 'xyz'[e];
+    }).join('');
+    var dir = 'xyz';
+    plane.split('').forEach(function (e) {
+      return dir = dir.split(e).join('');
+    });
+    var sign = block.point[dir] < 0 ? -1 : 1;
+    var coord = cube.get3DCoordinatesOfPiece(block.object.parent);
+    currentPlane = plane;
+    currentSign = sign;
+    currentCoordinates = coord;
+  }
+}
+
+function touchStart(event) {
+  mouse.x = event.changedTouches[0].clientX / window.innerWidth * 2 - 1;
+  mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (intersects.length) {
+    controls.enabled = false;
+    dragStart = intersects[0].point;
+  } else {
+    dragStart = undefined;
+  }
+
+  if (intersects.length) {
+    controls.enabled = false;
+    var block = intersects[0];
+    var _block$point2 = block.point,
+        x = _block$point2.x,
+        y = _block$point2.y,
+        z = _block$point2.z;
+    var max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+    var plane = [Math.abs(x), Math.abs(y), Math.abs(z)].map(function (e) {
+      return e < max;
+    }).reduce(function (a, e, i) {
+      return e ? a + i : a;
+    }, '').split('').map(function (e) {
+      return 'xyz'[e];
+    }).join('');
+    var dir = 'xyz';
+    plane.split('').forEach(function (e) {
+      return dir = dir.split(e).join('');
+    });
+    var sign = block.point[dir] < 0 ? -1 : 1;
+    var coord = cube.get3DCoordinatesOfPiece(block.object.parent);
+    currentPlane = plane;
+    currentSign = sign;
+    currentCoordinates = coord;
+  } else {
+    controls.enabled = true;
+  }
+}
+
+function onMouseUp(event) {
+  if (dragStart && dragEnd) {
+    var dx = dragEnd.x - dragStart.x;
+    var dy = dragEnd.y - dragStart.y;
+    var dz = dragEnd.z - dragStart.z;
+    var dir;
+    var rotationAxis;
+    var rotationIndex;
+    var rotationDirection;
+
+    switch (currentPlane) {
+      case 'xy':
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) dir = 'L';else dir = 'R';
+        } else {
+          if (dy < 0) dir = 'D';else dir = 'U';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'y';
+          rotationIndex = currentCoordinates.y;
+          rotationDirection = dir === 'L' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'x';
+          rotationIndex = currentCoordinates.x;
+          rotationDirection = dir === 'U' ? 'anti' : 'clockwise';
+        }
+
+        break;
+
+      case 'yz':
+        if (Math.abs(dy) > Math.abs(dz)) {
+          if (dy < 0) dir = 'D';else dir = 'U';
+        } else {
+          if (dz < 0) dir = 'L';else dir = 'R';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'y';
+          rotationIndex = currentCoordinates.y;
+          rotationDirection = dir === 'R' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'z';
+          rotationIndex = currentCoordinates.z;
+          rotationDirection = dir === 'D' ? 'anti' : 'clockwise';
+        }
+
+        break;
+
+      case 'xz':
+        if (Math.abs(dx) > Math.abs(dz)) {
+          if (dx < 0) dir = 'L';else dir = 'R';
+        } else {
+          if (dz < 0) dir = 'U';else dir = 'D';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'z';
+          rotationIndex = currentCoordinates.z;
+          rotationDirection = dir === 'R' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'x';
+          rotationIndex = currentCoordinates.x;
+          rotationDirection = dir === 'U' ? 'anti' : 'clockwise';
+        }
+
+        break;
+    }
+
+    if (currentSign === -1) {
+      rotationDirection = rotationDirection == 'clockwise' ? 'anti' : 'clockwise';
+    }
+
+    if (!cube.shuffling) {
+      cube.rotateSclice(rotationAxis, rotationIndex, rotationDirection);
+      setTimeout(function () {
+        if (cube.checkGameStatus()) cube.showCongrats();
+      }, 500);
+    }
+  }
+
+  dragStart = undefined;
+  dragEnd = undefined;
+}
+
+function touchEnd(event) {
+  if (dragStart && dragEnd) {
+    var dx = dragEnd.x - dragStart.x;
+    var dy = dragEnd.y - dragStart.y;
+    var dz = dragEnd.z - dragStart.z;
+    var dir;
+    var rotationAxis;
+    var rotationIndex;
+    var rotationDirection;
+
+    switch (currentPlane) {
+      case 'xy':
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) dir = 'L';else dir = 'R';
+        } else {
+          if (dy < 0) dir = 'D';else dir = 'U';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'y';
+          rotationIndex = currentCoordinates.y;
+          rotationDirection = dir === 'L' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'x';
+          rotationIndex = currentCoordinates.x;
+          rotationDirection = dir === 'U' ? 'anti' : 'clockwise';
+        }
+
+        break;
+
+      case 'yz':
+        if (Math.abs(dy) > Math.abs(dz)) {
+          if (dy < 0) dir = 'D';else dir = 'U';
+        } else {
+          if (dz < 0) dir = 'L';else dir = 'R';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'y';
+          rotationIndex = currentCoordinates.y;
+          rotationDirection = dir === 'R' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'z';
+          rotationIndex = currentCoordinates.z;
+          rotationDirection = dir === 'D' ? 'anti' : 'clockwise';
+        }
+
+        break;
+
+      case 'xz':
+        if (Math.abs(dx) > Math.abs(dz)) {
+          if (dx < 0) dir = 'L';else dir = 'R';
+        } else {
+          if (dz < 0) dir = 'U';else dir = 'D';
+        }
+
+        if (dir === 'R' || dir === 'L') {
+          rotationAxis = 'z';
+          rotationIndex = currentCoordinates.z;
+          rotationDirection = dir === 'R' ? 'anti' : 'clockwise';
+        } else {
+          rotationAxis = 'x';
+          rotationIndex = currentCoordinates.x;
+          rotationDirection = dir === 'U' ? 'anti' : 'clockwise';
+        }
+
+        break;
+    }
+
+    if (currentSign === -1) {
+      rotationDirection = rotationDirection == 'clockwise' ? 'anti' : 'clockwise';
+    }
+
+    if (!cube.shuffling) {
+      cube.rotateSclice(rotationAxis, rotationIndex, rotationDirection);
+      setTimeout(function () {
+        if (cube.checkGameStatus()) cube.showCongrats();
+      }, 500);
+    }
+  }
+
+  dragStart = undefined;
+  dragEnd = undefined;
+}
+
+var mouseEventQuata = 0;
+var mouseEventLimit = mouseEventQuata;
+
+function mouseMove(event) {
+  if (mouseEventLimit < 0 || dragStart) {
+    mouse.x = event.clientX / window.innerWidth * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length == 0) {
+      if (!isMobile) controls.enabled = true;
+    } else {
+      dragEnd = intersects[0].point;
+      controls.enabled = false;
+    }
+
+    mouseEventLimit = mouseEventQuata;
+  }
+
+  mouseEventLimit--;
+}
+
+function touchMove(event) {
+  if (mouseEventLimit < 0 || dragStart) {
+    mouse.x = event.changedTouches[0].clientX / window.innerWidth * 2 - 1;
+    mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length) {
+      dragEnd = intersects[0].point;
+      controls.enabled = false;
+    }
+
+    mouseEventLimit = mouseEventQuata;
+  }
+
+  mouseEventLimit--;
+}
+
+var animate = function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+};
+
+animate();
